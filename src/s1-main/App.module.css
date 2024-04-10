@@ -1,16 +1,18 @@
 .App {
     --header_height: 60px;
+    padding: 0 70px;
 }
 
 .container {
     margin: 0 auto;
-    padding: 0 70px;
 }
 
 .hw {
+    margin-bottom: 50px;
 }
 
 .hwTitle {
+    margin: 20px 0;
     font-family: Montserrat;
     font-size: 22px;
     font-weight: 600;
