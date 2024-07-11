@@ -1,11 +1,28 @@
 .pagination {
+    margin-bottom: 35px;
+
     display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination > select {
+    width: 50px;
+
+    border-radius: 2px;
+    background: rgb(255, 255, 255);
 }
 
 .text1 {
-
+    color: rgb(13, 11, 12);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
 }
 
 .text2 {
-
+    color: rgb(13, 11, 12);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
 }
