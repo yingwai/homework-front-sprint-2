@@ -28,6 +28,7 @@ const HW13 = () => {
     const [text, setText] = useState('')
     const [info, setInfo] = useState('')
     const [image, setImage] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const send = (x?: boolean | null) => () => {
         const url =
@@ -39,31 +40,36 @@ const HW13 = () => {
         setImage('')
         setText('')
         setInfo('...loading')
+        setLoading(true)
 
         axios
             .post(url, { success: x })
             .then((res) => {
-                setCode('Код 200!')
+                setCode(`Код ${res.status}!`)
                 setImage(success200)
-                setText(`...всё ок) <br /> код 200 - обычно означает что скорее всего всё ок)`)
+                setText(res.data.errorText)
+                setInfo(res.data.info)
             })
             .catch((e: AxiosError<Error>) => {
                 if (e.response?.status === 500) {
                     setCode(`Ошибка ${e.response.status}!`)
                     setImage(error500)
-                    setText(`${e.response.data.errorText} <br /> ${e.response.data.info}`)
+                    setText(e.response.data.errorText)
+                    setInfo(e.response.data.info)
                 } else if (e.response?.status === 400) {
                     setCode(`Ошибка ${e.response.status}!`)
                     setImage(error400)
-                    setText(`${e.response.data.errorText} <br /> ${e.response.data.info}`)
+                    setText(e.response.data.errorText)
+                    setInfo(e.response.data.info)
                 } else {
                     setCode(`Error!`)
                     setImage(errorUnknown)
-                    setText(`Network Error <br /> AxiosError`)
+                    setText(`Network Error`)
+                    setInfo(`AxiosError`)
                 }
             })
             .finally(() => {
-                setInfo('')
+                setLoading(false)
             })
     }
 
@@ -77,7 +83,7 @@ const HW13 = () => {
                         id={'hw13-send-true'}
                         onClick={send(true)}
                         xType={'secondary'}
-                        disabled={!!info}
+                        disabled={loading}
                     >
                         Send true
                     </SuperButton>
@@ -85,7 +91,7 @@ const HW13 = () => {
                         id={'hw13-send-false'}
                         onClick={send(false)}
                         xType={'secondary'}
-                        disabled={!!info}
+                        disabled={loading}
                     >
                         Send false
                     </SuperButton>
@@ -93,7 +99,7 @@ const HW13 = () => {
                         id={'hw13-send-undefined'}
                         onClick={send(undefined)}
                         xType={'secondary'}
-                        disabled={!!info}
+                        disabled={loading}
                     >
                         Send undefined
                     </SuperButton>
@@ -101,7 +107,7 @@ const HW13 = () => {
                         id={'hw13-send-null'}
                         onClick={send(null)} // имитация запроса на не корректный адрес
                         xType={'secondary'}
-                        disabled={!!info}
+                        disabled={loading}
                     >
                         Send null
                     </SuperButton>
@@ -116,9 +122,9 @@ const HW13 = () => {
                         <div id={'hw13-code'} className={s.code}>
                             {code}
                         </div>
-                        <div id={'hw13-text'} className={s.text}
-                            dangerouslySetInnerHTML={{ __html: text }}
-                        ></div>
+                        <div id={'hw13-text'} className={s.text}>
+                            {text}
+                        </div>
                         <div id={'hw13-info'} className={s.info}>
                             {info}
                         </div>
